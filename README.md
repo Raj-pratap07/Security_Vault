@@ -1,6 +1,6 @@
-# Firefly
+# Security Vault
 
-Firefly is a synchronous FastAPI hackathon demo. It splits a secret into three
+Security vault is a synchronous FastAPI hackathon demo. It splits a secret into three
 Shamir shares (threshold two), encrypts each share with its configured
 Akeyless key, and stores one ciphertext each in Upstash, Neon, and Firestore.
 SQLCipher protects local metadata.
@@ -67,5 +67,4 @@ credentials for integration tests.
 
 The demo is an HTTP client of the FastAPI server (1 share fails, 2 or 3 rebuild). Start `uvicorn app.main:app`
 with `FIREFLY_DEMO_ENDPOINTS=true`, then run `python -m scripts.demo`; for a no-credentials rehearsal use
-`uvicorn scripts.demo_server:create_app --factory` and `python -m scripts.demo --rehearsal`. See
-[Hackathon verification](./docs/firefly-docs-pack/docs/HACKATHON_VERIFICATION.md).
+`uvicorn scripts.demo_server:create_app --factory` and `python -m scripts.demo --rehearsal`. 
