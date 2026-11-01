@@ -1,0 +1,1 @@
+"""Firefly application package."""

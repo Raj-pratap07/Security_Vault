@@ -1,0 +1,15 @@
+flowchart TD
+    A[Application startup] --> B[Load stable SQLCipher DB key from protected config]
+    B --> C{DB file exists?}
+    C -- No --> D{Explicit first-time setup?}
+    D -- Yes --> E[Create encrypted DB and schema]
+    D -- No --> F[Fail closed; do not recreate]
+    C -- Yes --> G[Open existing DB with SQLCipher]
+    E --> H[Validate schema]
+    G --> H
+    H --> I[Run supported cipher_integrity_check]
+    I --> J{Valid?}
+    J -- No --> K[Stop sensitive operations; preserve file]
+    J -- Yes --> L[Application ready]
+    L --> M[Short metadata transactions]
+    M --> N[SQLCipher encrypts/authenticates pages at rest]

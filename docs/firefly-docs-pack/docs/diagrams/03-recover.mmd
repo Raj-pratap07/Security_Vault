@@ -1,0 +1,22 @@
+flowchart TD
+    A[Recovery request] --> B[Authenticate caller]
+    B --> C[Load SQLCipher metadata and verify ownership]
+    C --> D{AVAILABLE and authorized?}
+    D -- No --> E[Reject safely]
+    D -- Yes --> F[Select unused provider]
+    F --> G[Fetch ciphertext]
+    G --> H[Validate record/version/provider/index]
+    H --> I[Akeyless Decrypt with matching key/context]
+    I --> J{Valid authenticated share?}
+    J -- No --> K[Reject candidate; try another]
+    J -- Yes --> L[Collect distinct plaintext share]
+    L --> M{2 valid shares?}
+    M -- Yes --> N[SSS rebuild original secret]
+    M -- No --> O{Unused providers remain?}
+    K --> O
+    O -- Yes --> F
+    O -- No --> P[Fail safely]
+    N --> Q[Return secret to authorized caller; no-store]
+    E --> R[Best-effort cleanup]
+    P --> R
+    Q --> R

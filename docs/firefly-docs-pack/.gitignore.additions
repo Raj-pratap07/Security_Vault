@@ -1,0 +1,20 @@
+# Add these lines to the existing .gitignore (do not overwrite existing entries)
+.env
+.env.*
+!.env.example
+secrets/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.key
+*.pem
+service-account*.json
+firebase-service-account.json
+__pycache__/
+.pytest_cache/
+.venv/
+venv/
+htmlcov/
+coverage.xml

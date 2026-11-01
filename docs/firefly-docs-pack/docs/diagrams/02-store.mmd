@@ -1,0 +1,26 @@
+flowchart TD
+    A[Client submits secret over HTTPS] --> B[Authenticate, authorize, validate size]
+    B --> C[Create random record ID/version]
+    C --> D[Commit PENDING record and 3 share rows]
+    D --> E[SSS split: 3 shares, threshold 2]
+    E --> F[For each share: select fixed provider/key]
+    F --> G[Akeyless Encrypt with stable context]
+    G --> H{Encryption succeeded?}
+    H -- No --> X[Failure handler]
+    H -- Yes --> I[Provider put using deterministic share ID]
+    I --> J{Confirmed outcome?}
+    J -- Yes --> K[Commit share status STORED]
+    K --> L{All three done?}
+    L -- No --> F
+    L -- Yes --> M[Verify 3 STORED; commit AVAILABLE]
+    M --> N[Return record ID/status]
+    J -- Timeout --> U[Commit UNKNOWN; reconcile deterministic ID]
+    U --> X
+    J -- Failure --> X
+    X --> Y[Rollback confirmed/possibly stored copies]
+    Y --> Z{All copies confirmed absent?}
+    Z -- Yes --> Q[Commit FAILED]
+    Z -- No --> R[Commit CLEANUP_REQUIRED]
+    N --> C1[Best-effort buffer cleanup]
+    Q --> C1
+    R --> C1
